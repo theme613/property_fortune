@@ -3,14 +3,15 @@ import type { OpenNextConfig } from "@opennextjs/cloudflare";
 const config: OpenNextConfig = {
   default: {
     override: {
-      wrapper: "cloudflare-edge",
+      wrapper: "cloudflare-node",
       converter: "edge",
-      // Uncomment and set a KV namespace binding name if needed for caching
-      // incrementalCache: "dummy",
-      // tagCache: "dummy",
-      // queue: "dummy",
+      proxyExternalRequest: "fetch",
+      incrementalCache: "dummy",
+      tagCache: "dummy",
+      queue: "direct",
     },
   },
+  edgeExternals: ["node:crypto"],
   middleware: {
     external: true,
     override: {
