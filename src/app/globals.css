@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+  /* DARK THEME (DEFAULT) */
+  --background: #0a0f16;
+  --foreground: #f4f4f5;
+  
+  --primary: #d4af37;       /* Champagne Gold */
+  --primary-glow: rgba(212, 175, 55, 0.3);
+  --secondary: #e5c07b;     /* Lighter Gold */
+  --accent: #1e293b;        /* Slate Blue */
+  
+  --glass-bg: rgba(20, 25, 35, 0.6);
+  --glass-border: rgba(212, 175, 55, 0.2);
+  --input-bg: rgba(255, 255, 255, 0.03);
+  --btn-text: #000;
+  
+  --font-sans: 'Montserrat', sans-serif;
+  --font-serif: 'Playfair Display', serif;
+}
+
+body.light {
+  /* LIGHT THEME */
+  --background: #f0f2f5;
+  --foreground: #1e293b;
+  
+  --primary: #b8860b;       /* Darker Gold for Light Theme Contrast */
+  --primary-glow: rgba(184, 134, 11, 0.2);
+  --secondary: #a37b3b;
+  --accent: #ffffff;
+  
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(184, 134, 11, 0.3);
+  --input-bg: rgba(0, 0, 0, 0.03);
+  --btn-text: #fff;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  transition: color 0.3s ease, background 0.3s ease;
+}
+
+/* Elegant property background */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(to bottom, rgba(10, 15, 22, 0.7), rgba(10, 15, 22, 0.95)),
+    url('/bg-property.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -1;
+  transition: opacity 0.3s ease, background-image 0.3s ease;
+}
+
+/* Light Theme Background Overlay (makes it bright daytime feeling) */
+body.light::before {
+  background-image: 
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.75), rgba(240, 242, 245, 0.95)),
+    url('/bg-property.png');
+}
+
+input, select, button {
+  font-family: inherit;
+}
+
+/* Dropdown styling to ensure options are readable */
+select option {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 4px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+body.light .glass-panel {
+  box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
