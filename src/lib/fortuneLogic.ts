@@ -15,6 +15,7 @@ export interface UserInput {
   birthDate: string;
   occupation: string;
   preferredArea: Region;
+  monthlyIncome: string;
 }
 
 export interface FortuneResult {

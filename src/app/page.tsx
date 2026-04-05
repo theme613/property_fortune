@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { UserInput, FortuneResult, ZodiacSign, Language, Region, getMatchedProperty } from '@/lib/fortuneLogic';
 import { generateDynamicFortune } from './actions';
 import FortuneResultCard from '@/components/FortuneResultCard';
-import { Building2, Compass, Briefcase, Calendar, Key, Sun, Moon, Music, Music2, Globe, MapPin } from 'lucide-react';
+import { Building2, Compass, Briefcase, Calendar, Key, Sun, Moon, Music, Music2, Globe, MapPin, TrendingUp } from 'lucide-react';
 
 const ZODIACS: ZodiacSign[] = [
   'Aries', 'Taurus', 'Gemini', 'Cancer', 
@@ -28,6 +28,15 @@ export const REGIONS: { value: Region; en: string; zh: string }[] = [
   { value: 'sarawak', en: 'Sarawak', zh: '砂拉越' },
 ];
 
+const INCOME_RANGES = [
+  { value: 'below_3k',  en: 'Below RM 3,000 / month',        zh: '月收入低于 RM 3,000' },
+  { value: '3k_5k',    en: 'RM 3,000 – RM 5,000 / month',   zh: '月收入 RM 3,000 – RM 5,000' },
+  { value: '5k_8k',    en: 'RM 5,000 – RM 8,000 / month',   zh: '月收入 RM 5,000 – RM 8,000' },
+  { value: '8k_12k',   en: 'RM 8,000 – RM 12,000 / month',  zh: '月收入 RM 8,000 – RM 12,000' },
+  { value: '12k_20k',  en: 'RM 12,000 – RM 20,000 / month', zh: '月收入 RM 12,000 – RM 20,000' },
+  { value: 'above_20k',en: 'Above RM 20,000 / month',       zh: '月收入高于 RM 20,000' },
+];
+
 const DICT = {
   en: {
     title: 'Property Destiny',
@@ -36,6 +45,7 @@ const DICT = {
     dobLbl: 'Date of Birth',
     profLbl: 'Profession',
     profPlc: 'e.g. Entrepreneur, Engineer, Investor',
+    incomeLbl: 'Monthly Income',
     regionLbl: 'Preferred Location',
     btnSearch: 'Discover Your Property',
     load1: 'Consulting the Oracle...',
@@ -52,6 +62,7 @@ const DICT = {
     dobLbl: '出生日期',
     profLbl: '职业领域',
     profPlc: '例如：企业家、工程师、投资人',
+    incomeLbl: '每月收入',
     regionLbl: '期望区域与州属',
     btnSearch: '洞悉您的专属产业',
     load1: '正在连接星象神谕...',
@@ -100,7 +111,8 @@ export default function Home() {
     zodiac: 'Aries',
     birthDate: '', 
     occupation: '',
-    preferredArea: 'any'
+    preferredArea: 'any',
+    monthlyIncome: '5k_8k'
   });
 
   const [bDay, setBDay] = useState('1');
@@ -397,6 +409,25 @@ export default function Home() {
                     onFocus={applyFocus}
                     onBlur={removeFocus}
                   />
+                </motion.div>
+
+                <motion.div variants={slideUpItem} style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', opacity: 0.8, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                    <TrendingUp size={16} /> {t.incomeLbl}
+                  </label>
+                  <select 
+                    name="monthlyIncome"
+                    value={formData.monthlyIncome}
+                    onChange={handleChange}
+                    required
+                    style={selectStyles}
+                    onFocus={applyFocus}
+                    onBlur={removeFocus}
+                  >
+                    {INCOME_RANGES.map(r => (
+                       <option key={r.value} value={r.value}>{language === 'zh' ? r.zh : r.en}</option>
+                    ))}
+                  </select>
                 </motion.div>
 
                 <motion.div variants={slideUpItem} style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>

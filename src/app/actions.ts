@@ -28,19 +28,31 @@ export async function generateDynamicFortune(input: UserInput, language: Languag
       Sagittarius: '射手座', Capricorn: '摩羯座', Aquarius: '水瓶座', Pisces: '双鱼座'
     };
 
-    const prompt = language === 'zh' 
-      ? `你是一个顶级的星象房地产预测师。用户的星座是“${zodiacMap[input.zodiac]}”（具有该星座的典型性格和星象元素），出生于“${input.birthDate}”，职业是“${input.occupation}”。
-         他们与房产“${property.title}”完美匹配。该房产的特征是：${property.desc}。
-         请用2至3句话，写出一段充满赞美、且高度针对性的星象风水预测（中文）。你必须做到以下两点：
-         1. 解释他们作为“${zodiacMap[input.zodiac]}”的内在性格特质，为什么天生就需要这套房产的独特空间设计或环境氛围。
-         2. 强烈赞美他们的职业“${input.occupation}”并说明这套房产能如何成为他们扩展事业版图的完美根据地。
-         把星象性格、职业特性与房产的各项优势完美合理地结合起来。直接输出预测结果，无须问候，不加任何前缀或引号。`
-      : `You are an elite astrological real estate fortune teller. The user is a ${input.zodiac} born on ${input.birthDate}, working as a/an ${input.occupation}. 
-         They have been matched with the property: "${property.title}". Property features: ${property.desc}. 
-         Write a 2-3 sentence personalized, highly flattering, mystical fortune. You MUST accomplish two things:
-         1. Explain specifically why their psychological personality traits and aura as a ${input.zodiac} perfectly require the unique physical/architectural features of this house. 
-         2. Flatter their career and explain how this specific property empowers their success as a/an ${input.occupation}.
-         Logically fuse their Zodiac personality, their career status, and the specific house details into one creative pitch. Return ONLY the fortune text itself, without prefixes or quotes.`;
+    const incomeLabel: Record<string, string> = {
+      below_3k:  language === 'zh' ? '月收入低于RM3,000' : 'below RM 3,000/month',
+      '3k_5k':   language === 'zh' ? '月收入RM3,000-5,000' : 'RM 3,000–5,000/month',
+      '5k_8k':   language === 'zh' ? '月收入RM5,000-8,000' : 'RM 5,000–8,000/month',
+      '8k_12k':  language === 'zh' ? '月收入RM8,000-12,000' : 'RM 8,000–12,000/month',
+      '12k_20k': language === 'zh' ? '月收入RM12,000-20,000' : 'RM 12,000–20,000/month',
+      above_20k: language === 'zh' ? '月收入高于RM20,000' : 'above RM 20,000/month',
+    };
+    const income = incomeLabel[input.monthlyIncome] || input.monthlyIncome;
+
+    const prompt = language === 'zh'
+      ? `你是一个顶级的星象房地产预测师。用户星座"${zodiacMap[input.zodiac]}"，出生于"${input.birthDate}"，职业"${input.occupation}"，${income}。
+         完美匹配房产："${property.title}"。特征：${property.desc}。
+         请用2至3句话写出高度针对性的星象预测（中文）：
+         1. 解释其${zodiacMap[input.zodiac]}性格特质与该房产空间设计的天然契合。
+         2. 赞美其职业并说明此房产如何助其事业腾飞。
+         3. 称赞其以${income}的经济实力，能将此优质资产纳入囊中，是宇宙赋予的财富智慧。
+         直接输出预测，无前缀无引号。`
+      : `You are an elite astrological real estate fortune teller. The user is a ${input.zodiac} born on ${input.birthDate}, working as a/an ${input.occupation}, earning ${income}. 
+         Matched property: "${property.title}". Features: ${property.desc}. 
+         Write 2-3 sentences of highly personalized, flattering, mystical fortune:
+         1. Explain why their ${input.zodiac} personality traits demand this property's specific features.
+         2. Flatter their career and how this property powers their success.
+         3. Praise their income level (${income}) as a sign of cosmic abundance — affirm that securing this property is a spiritually and financially aligned power move.
+         Fuse Zodiac, career, income, and property into one compelling pitch. Return ONLY the fortune text, no prefixes or quotes.`;
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
